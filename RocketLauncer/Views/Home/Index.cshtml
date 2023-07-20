@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewData["Title"] = "Rocket";
+}
+
+<h1>Rocket Launch</h1>
+
+<div>
+    <h4>Rocket Info</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            <spam>Id: </spam>
+        </dt>
+        <dd class="col-sm-10">
+            <div id="idResult"></div>
+        </dd>
+        <dt class="col-sm-2">
+            <spam>Name: </spam>
+        </dt>
+        <dd class="col-sm-10">
+            <div id="nameResult"></div>
+        </dd>
+        <dt class="col-sm-2">
+            <spam>Type: </spam>
+        </dt>
+        <dd class="col-sm-10">
+            <div id="typeResult"></div>
+        </dd>
+    </dl>
+</div>
+
+<button id="submitButton" type="button" class="btn btn-primary">Save Rocket Data</button>
+
+
+@section Scripts {
+    <script>
+        document.getElementById("submitButton").addEventListener("click", function () {
+            submitRocketData();
+        });
+
+        function submitRocketData() {
+            // Create the Rocket data object to send in the POST request
+            var rocketData = {
+                "Id": 1,
+                "Name": "Falcon 9",
+                "Type": "Reusable"
+            };
+
+            // Make the API POST request using AJAX
+            fetch('/api/rocketAPI', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(rocketData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Log the response from the API in the console
+                    displayResponseMessage(data);
+                    console.log(data);
+                    alert("Rocket data save successfully!", data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while sending Rocket data.");
+                });
+
+
+            function displayResponseMessage(result) {
+                var responseMessageElement = document.getElementById("idResult");
+                responseMessageElement.textContent = result.id;
+                var responseMessageElement = document.getElementById("nameResult");
+                responseMessageElement.textContent = result.name;
+                var responseMessageElement = document.getElementById("typeResult");
+                responseMessageElement.textContent = result.type;
+            }
+        }
+    </script>
+}
